@@ -94,7 +94,7 @@ func NewRemotingCommand(code int16, header CustomHeader, body []byte) *RemotingC
 		Version:   _Version,
 		Opaque:    atomic.AddInt32(&opaque, 1),
 		Body:      body,
-		Language:  _Go,
+		Language:  _Java,
 		ExtFields: make(map[string]string),
 	}
 
