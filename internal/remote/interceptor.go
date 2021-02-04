@@ -32,6 +32,7 @@ import (
 const (
 	signature     = "Signature"
 	accessKey     = "AccessKey"
+	onsChannel    = "OnsChannel"
 	securityToken = "SecurityToken"
 	keyFile       = "KEY_FILE"
 	// System.getProperty("rocketmq.client.keyFile", System.getProperty("user.home") + File.separator + "key");
@@ -41,9 +42,11 @@ func ACLInterceptor(credentials primitive.Credentials) primitive.Interceptor {
 	return func(ctx context.Context, req, reply interface{}, next primitive.Invoker) error {
 		cmd := req.(*RemotingCommand)
 		m := make(map[string]string)
-		order := make([]string, 1)
+		order := make([]string, 2)
 		m[accessKey] = credentials.AccessKey
+		m[onsChannel] = "ALIYUN"
 		order[0] = accessKey
+		order[1] = onsChannel
 		if credentials.SecurityToken != "" {
 			m[securityToken] = credentials.SecurityToken
 		}
@@ -64,6 +67,7 @@ func ACLInterceptor(credentials primitive.Credentials) primitive.Interceptor {
 
 		cmd.ExtFields[signature] = calculateSignature(buf, []byte(credentials.SecretKey))
 		cmd.ExtFields[accessKey] = credentials.AccessKey
+		cmd.ExtFields[onsChannel] = "ALIYUN"
 
 		// The SecurityToken value is unnecessary, user can choose this one.
 		if credentials.SecurityToken != "" {
