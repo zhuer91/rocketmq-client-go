@@ -35,25 +35,25 @@ const (
 	//ResponseType for response
 	ResponseType = 1
 	_Flag        = 0
-	_Version     = 317
+	_Version     = 63
 )
 
 type LanguageCode byte
 
 const (
-	_Java    = LanguageCode(0)
+	_Cpp     = LanguageCode(0)
 	_Go      = LanguageCode(9)
 	_Unknown = LanguageCode(127)
 )
 
 func (lc LanguageCode) MarshalJSON() ([]byte, error) {
-	return []byte(`"GO"`), nil
+	return []byte(`"CPP"`), nil
 }
 
 func (lc *LanguageCode) UnmarshalJSON(b []byte) error {
 	switch string(b) {
-	case "JAVA":
-		*lc = _Java
+	case "CPP":
+		*lc = _Cpp
 	case "GO", `"GO"`:
 		*lc = _Go
 	default:
@@ -64,7 +64,7 @@ func (lc *LanguageCode) UnmarshalJSON(b []byte) error {
 
 func (lc LanguageCode) String() string {
 	switch lc {
-	case _Java:
+	case _Cpp:
 		return "JAVA"
 	case _Go:
 		return "GO"
@@ -94,7 +94,7 @@ func NewRemotingCommand(code int16, header CustomHeader, body []byte) *RemotingC
 		Version:   _Version,
 		Opaque:    atomic.AddInt32(&opaque, 1),
 		Body:      body,
-		Language:  _Java,
+		Language:  _Cpp,
 		ExtFields: make(map[string]string),
 	}
 
